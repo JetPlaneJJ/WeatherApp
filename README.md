@@ -1,2 +1,2 @@
 # WeatherApp
-weather app javascript
+weather app javascript at https://jetplanejj.github.io/WeatherApp/
