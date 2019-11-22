@@ -6,13 +6,13 @@ body, html, section, inputs {
 }
 
 .rain {
-    background: url(rain.gif);
+    background: url(images/rain.gif);
 }
 .snow {
-    background: url(snow.gif);
+    background: url(images/snow.gif);
 }
 .fog {
-    background: url(fog.png);
+    background: url(images/fog.png);
     animation: foggy 10s linear infinite;
 }
 @keyframes foggy {
@@ -22,7 +22,7 @@ body, html, section, inputs {
 
 .flexy {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
 }
 
