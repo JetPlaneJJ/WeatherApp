@@ -30,6 +30,7 @@ function init() {
         }
     )
     function changeImage(new_img) {
+        console.log(new_img);
         let audio = document.getElementById("audio");
         console.log(audio);
         audio.pause()
@@ -40,25 +41,23 @@ function init() {
 
         let imgs = ["cloudy", "rain", "semi_cloudy", "snowflake", "storm", "sunny"];
         // if not in listed weathers, default cloudy
-        if (!imgs.includes(new_img.toLowerCase())) {
+        console.log(new_img.toLowerCase() == "clear");
+        if (new_img.toLowerCase() == "clear") { // sunny
+            img.src = "images/sunny.svg";
+        }
+        else if (new_img.toLowerCase() == "clouds") { // cloudy
             img.src = "images/cloudy.svg";
             top.classList.add("fog");
         }
-        else if (new_img.toLowerCase() == "clear") {
-            img.src = "images/sunny.svg";
+        else if (new_img.toLowerCase() == "snow") { // snowy
+            img.src = "images/snowflake.svg";
+            top.classList.add("snow");
         }
         else {
-            img.src = "images/" + new_img.toLowerCase() + ".svg"; // to be able to change between images
-        }
-        // if rainy, set background animation and raining sound
-        if (new_img.toLowerCase() == "rain" || new_img.toLowerCase() == "storm") {
+            img.src = "images/rain.svg";
             top.classList.add("rain");
             audio.play()
             audio.loop = true;
-        }
-        // if snowy, set snow
-        if (new_img.toLowerCase() == "snow") {
-            top.classList.add("snow");
         }
     }
     changeLocation();
