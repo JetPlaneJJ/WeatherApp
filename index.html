@@ -4,21 +4,38 @@
         <link href="style.css" rel="stylesheet" type="text/css" />
         <script src="script.js"></script>
     </head>
+    <audio id="audio">
+        <source src="rain.mp3" type="audio/mpeg">
+    </audio>
     <body>
-        <section class="flexy">
+        <section class="flexy" id = "top">
             <div class="flexy">
-                <img src="images/cloudy.svg" /> 
-                <h1>14&deg;</h1>
+                <img id = "img" src="images/cloudy.svg" />
+                <h1></h1>
                 <div>
-                    <button id = "C">C</button>
-                    <button id = "F">F</button>
+                    <button class = "degs_btn" id = "C">C</button>
+                    <button class = "degs_btn" id = "F">F</button>
                 </div>
             </div>
-
             <div>
-                <h3>UW Seattle</h3>
-                <h5>Thursday</h5>
-                <h4>Cloudy</h4>
+                <h3></h3>
+                <h5></h5>
+                <h4></h4>
+            </div>
+        </section>
+        <section class = "flexy" id = "input_section">
+            <div class = "input">
+                <input class = "inputs" id = "get_zip" type = "text" placeholder="Enter Zip Code"/>
+                <button class = "input_btn" id = "zip_btn">Get Weather</button>
+            </div>
+            <div class = "input">
+                <input class = "inputs" id = "get_city" type = "text" placeholder="Enter City Name"/>
+                <button class = "input_btn" id = "city_btn">Get Weather</button>
+            </div>
+            <div class = "input">
+                <input class = "inputs" id = "get_lat" type = "text" placeholder="Enter Latitude"/>
+                <input class = "inputs" id = "get_lon" type = "text" placeholder="Enter Longitude"/>
+                <button class = "input_btn" id = "latlon_btn">Get Weather</button>
             </div>
         </section>
     </body>
