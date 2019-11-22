@@ -5,12 +5,11 @@ let Base_API = "//api.openweathermap.org/data/2.5/weather?";
 let APIKey = "7b9ef6d5a3c36d00b45d1c53aa1413c9";
 
 function init() {
-    // buttons
+    /** buttons **/
     let buttonC = document.getElementById("C");
     let buttonF = document.getElementById("F");
     buttonC.disabled = true;
-    // F - > C
-    buttonC.addEventListener("click",
+    buttonC.addEventListener("click", // F - > C
         function() {
             let temp = document.querySelector("h1");
             let temp_num = parseInt(temp.innerText);
@@ -20,8 +19,7 @@ function init() {
             buttonF.disabled = false; // can click on Fahrenheit
         }
     )
-    // C - > F
-    buttonF.addEventListener("click",
+    buttonF.addEventListener("click", // C - > F
         function() {
             let temp = document.querySelector("h1");
             let temp_num = parseInt(temp.innerText);
@@ -64,17 +62,39 @@ function init() {
         }
     }
     changeLocation();
+    /** check for user inputs **/
     let buttonZip = document.getElementById("zip_btn");
+    let inputZip = document.getElementById("get_zip");
+
     let buttonCity = document.getElementById("city_btn");
+    let inputCity = document.getElementById("get_city");
+
     let buttonLatLon = document.getElementById("latlon_btn");
+    let inputLat = document.getElementById("get_lon");
+
     buttonZip.addEventListener("click", function(){
         changeLocation("zip")
+    })
+    inputZip.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            buttonZip.click();
+        }
     })
     buttonCity.addEventListener("click", function(){
         changeLocation("city")
     })
+    inputCity.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            buttonCity.click();
+        }
+    })
     buttonLatLon.addEventListener("click", function() {
         changeLocation("latlon")
+    })
+    inputLat.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            buttonLatLon.click();
+        }
     })
 
     function changeLocation(mode) {
