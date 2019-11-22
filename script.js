@@ -50,7 +50,7 @@ function init() {
             img.src = "images/sunny.svg";
         }
         else {
-            img.src = "images/" + new_img + ".svg"; // to be able to change between images
+            img.src = "images/" + new_img.toLowerCase() + ".svg"; // to be able to change between images
         }
         // if rainy, set background animation and raining sound
         if (new_img.toLowerCase() == "rain" || new_img.toLowerCase() == "storm") {
