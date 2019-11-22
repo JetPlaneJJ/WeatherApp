@@ -1,0 +1,25 @@
+/* 
+Instructions:
+1. give the div with id flexbox a value of flex 
+for the display property
+2. for the same div, give it a value of column-reverse for
+flex-direction
+3. make a psuedoselector for #flexbox that changes the background 
+color to white
+4. add a property of justify-content to the #flexbox selector and
+give it a value of flex-end
+5. add a class of hiddenText to all p tags in the html file
+6. use a css class selector to give all tags with the class 
+hiddenText a margin-left of 0.5em and a margin-right of 0.5em
+
+*/
+
+#flexbox {
+    display: none;
+    background-color: red;
+}
+
+p {
+    color: red;
+}
+
