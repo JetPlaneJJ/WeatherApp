@@ -141,4 +141,3 @@ function CtoF(degree) {
     ret = ret + 32;
     return Math.round(ret);
 }
-
