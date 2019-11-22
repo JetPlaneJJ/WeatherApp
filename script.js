@@ -32,10 +32,10 @@ function init() {
         }
     )
     function changeImage(new_img) {
+        //let audio = document.getElementById("audio");
         let image = document.getElementById("img");
         let top = document.getElementById("top");
-        const audio = document.querySelector("#audio");
-        audio.pause()
+
         top.className = 'flexy';
         let imgs = ["cloudy", "rain", "semi_cloudy", "snowflake", "storm", "sunny"];
         // if not in listed weathers, default cloudy
@@ -48,7 +48,7 @@ function init() {
         // if rainy, set background animation and raining sound
         if (new_img.toLowerCase() == "rain" || new_img.toLowerCase() == "storm") {
             top.classList.add("rain");
-            audio.play()
+            //audio.play()
         }
         // if snowy, set snow
         if (new_img.toLowerCase() == "snow") {
