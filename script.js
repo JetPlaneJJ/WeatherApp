@@ -1,7 +1,7 @@
 console.log("hello");
 window.addEventListener("load", init)
 
-let Base_API = "http://api.openweathermap.org/data/2.5/weather?";
+let Base_API = "//api.openweathermap.org/data/2.5/weather?";
 let APIKey = "7b9ef6d5a3c36d00b45d1c53aa1413c9";
 
 function init() {
