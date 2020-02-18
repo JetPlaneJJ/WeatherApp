@@ -7,7 +7,9 @@ let APIKey = "7b9ef6d5a3c36d00b45d1c53aa1413c9";
 function init() {
     /** buttons **/
     let buttonC = document.getElementById("C");
+    buttonC.alt = "Change to degrees Celsius";
     let buttonF = document.getElementById("F");
+    buttonC.alt = "Change to degrees Fahrenheit";
     buttonC.disabled = true;
     buttonC.addEventListener("click", // F - > C
         function() {
@@ -44,17 +46,21 @@ function init() {
         console.log(new_img.toLowerCase() == "clear");
         if (new_img.toLowerCase() == "clear") { // sunny
             img.src = "images/sunny.svg";
+            img.alt = "Yellow Sun";
         }
         else if (new_img.toLowerCase() == "clouds") { // cloudy
             img.src = "images/cloudy.svg";
+            img.alt = "Gray Clouds";
             top.classList.add("fog");
         }
         else if (new_img.toLowerCase() == "snow") { // snowy
             img.src = "images/snowflake.svg";
+            img.alt = "White Snowflake";
             top.classList.add("snow");
         }
         else {
             img.src = "images/rain.svg";
+            img.alt = "Gray Clouds and Rain";
             top.classList.add("rain");
             audio.play()
             audio.loop = true;
@@ -143,11 +149,28 @@ function init() {
                 let cast = document.querySelector("h4"); // ex: Rainy
                 cast.innerText = data.weather[0].main;
 
-                let place = document.querySelector("h3");
+                let place = document.querySelector("h3"); // geo location
                 place.innerText = data.name;
 
                 let country = document.querySelector("h5");
                 country.innerText = data.sys.country;
+
+                // added on 2-17-2020
+                let pressure = document.getElementById("press");
+                pressure.opacity=0;
+                pressure.innerText = "Atmospheric Pressure: " + data.main.pressure + " hPa";
+
+                let humidity = document.getElementById("humidity");
+                humidity.opacity=0;
+                humidity.innerText = "Humidity: " + data.main.humidity + "%";
+
+                let wnd = document.getElementById("windspeed");
+                wnd.opacity=0;
+                wnd.innerText = "Wind Speed: " + data.wind.speed + " meters/second";
+                fade(wnd);
+                fade(humidity);
+                fade(pressure);
+                fade(temp);
             })
             .catch(function(){
                 alert("Invalid response, please check your inputs.");
@@ -164,4 +187,17 @@ function CtoF(degree) {
     let ret = degree * 9 / 5;
     ret = ret + 32;
     return Math.round(ret);
+}
+
+// added fade in functionality 2-17-2020
+function fade(element) {
+    var op = 0;  // initial opacity
+    var timer = setInterval(function () {
+        if (op >= 1){
+            clearInterval(timer);
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op += 0.03;
+    }, 50);
 }
