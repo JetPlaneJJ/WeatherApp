@@ -1,203 +1,224 @@
-console.log("hello");
-window.addEventListener("load", init)
+window.addEventListener("load", init);
 
 let Base_API = "//api.openweathermap.org/data/2.5/weather?";
 let APIKey = "7b9ef6d5a3c36d00b45d1c53aa1413c9";
 
 function init() {
-    /** buttons **/
-    let buttonC = document.getElementById("C");
-    buttonC.alt = "Change to degrees Celsius";
-    let buttonF = document.getElementById("F");
-    buttonC.alt = "Change to degrees Fahrenheit";
+  /* Temperature Buttons */
+  let buttonC = document.getElementById("C");
+  buttonC.alt = "Change to degrees Celsius";
+  let buttonF = document.getElementById("F");
+  buttonC.alt = "Change to degrees Fahrenheit";
+  buttonC.disabled = true;
+  /* Location Inputs */
+  let buttonZip = document.getElementById("zip_btn");
+  let inputZip = document.getElementById("get_zip");
+
+  let buttonCity = document.getElementById("city_btn");
+  let inputCity = document.getElementById("get_city");
+
+  let buttonLatLon = document.getElementById("latlon_btn");
+  let inputLat = document.getElementById("get_lon");
+  /* Listeners */
+  // F - > C
+  buttonC.addEventListener("click", function () {
+    let temp = document.querySelector("h1");
+    let temp_num = parseInt(temp.innerText);
+    temp.innerText = fahrenToCels(temp_num) + "\xB0";
     buttonC.disabled = true;
-    buttonC.addEventListener("click", // F - > C
-        function() {
-            let temp = document.querySelector("h1");
-            let temp_num = parseInt(temp.innerText);
-            console.log(temp_num); // ex: shows 14, as in 14 degrees Celsius
-            temp.innerText = FtoC(temp_num) + '\xB0';
-            buttonC.disabled = true; // can't click on C anymore
-            buttonF.disabled = false; // can click on Fahrenheit
-        }
-    )
-    buttonF.addEventListener("click", // C - > F
-        function() {
-            let temp = document.querySelector("h1");
-            let temp_num = parseInt(temp.innerText);
-            console.log(temp_num); // shows 14, as in 14 degrees Celsius
-            temp.innerText = CtoF(temp_num) + '\xB0';
-            buttonF.disabled = true; // can't click on F anymore
-            buttonC.disabled = false;
-        }
-    )
-    function changeImage(new_img) {
-        console.log(new_img);
-        let audio = document.getElementById("audio");
-        console.log(audio);
-        audio.pause()
-        audio.loop = false;
-        let image = document.getElementById("img");
-        let top = document.getElementById("top");
-        top.className = 'flexy';
-
-        let imgs = ["cloudy", "rain", "semi_cloudy", "snowflake", "storm", "sunny"];
-        // if not in listed weathers, default cloudy
-        console.log(new_img.toLowerCase() == "clear");
-        if (new_img.toLowerCase() == "clear") { // sunny
-            img.src = "images/sunny.svg";
-            img.alt = "Yellow Sun";
-        }
-        else if (new_img.toLowerCase() == "clouds") { // cloudy
-            img.src = "images/cloudy.svg";
-            img.alt = "Gray Clouds";
-            top.classList.add("fog");
-        }
-        else if (new_img.toLowerCase() == "snow") { // snowy
-            img.src = "images/snowflake.svg";
-            img.alt = "White Snowflake";
-            top.classList.add("snow");
-        }
-        else {
-            img.src = "images/rain.svg";
-            img.alt = "Gray Clouds and Rain";
-            top.classList.add("rain");
-            audio.play()
-            audio.loop = true;
-        }
+    buttonF.disabled = false;
+  });
+  // C - > F
+  buttonF.addEventListener("click", function () {
+    let temp = document.querySelector("h1");
+    let temp_num = parseInt(temp.innerText);
+    console.log(temp_num);
+    temp.innerText = celsToFahren(temp_num) + "\xB0";
+    buttonF.disabled = true;
+    buttonC.disabled = false;
+  });
+  buttonZip.addEventListener("click", function () {
+    setLocation("zip");
+  });
+  inputZip.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+      buttonZip.click();
     }
-    changeLocation();
-    /** check for user inputs **/
-    let buttonZip = document.getElementById("zip_btn");
-    let inputZip = document.getElementById("get_zip");
-
-    let buttonCity = document.getElementById("city_btn");
-    let inputCity = document.getElementById("get_city");
-
-    let buttonLatLon = document.getElementById("latlon_btn");
-    let inputLat = document.getElementById("get_lon");
-
-    buttonZip.addEventListener("click", function(){
-        changeLocation("zip")
-    })
-    inputZip.addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-            buttonZip.click();
-        }
-    })
-    buttonCity.addEventListener("click", function(){
-        changeLocation("city")
-    })
-    inputCity.addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-            buttonCity.click();
-        }
-    })
-    buttonLatLon.addEventListener("click", function() {
-        changeLocation("latlon")
-    })
-    inputLat.addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-            buttonLatLon.click();
-        }
-    })
-
-    function changeLocation(mode) {
-        console.log(mode);
-        let units = "metric";
-        if (buttonF.disabled) {
-            units = "imperial"; // if in Fahrenheit
-        }
-        let key = "q=Seattle";
-        if (mode == "zip") {
-            let input = document.getElementById("get_zip");
-            key = "zip=" + input.value;
-        }
-        else if (mode=="city") {
-            let input = document.getElementById("get_city");
-            key = "q=" + input.value;
-        }
-        else if (mode=="latlon") {
-            let lat = document.getElementById("get_lat");
-            let lon = document.getElementById("get_lon");
-            key = "lat=" + lat.value + "&lon=" + lon.value;
-        }
-        console.log(key);
-        let url = Base_API + key + "&units=" + units + "&appid=" + APIKey;
-        // using the console to check what things to add
-        console.log(url);
-        // calling the API
-        fetch(url)
-            // Set up a basic check function (convert promise to response)
-            .then(function(data) {
-                if (data.status >= 200 && data.status < 300) {
-                    return data.text();
-                }
-                else {
-                    return 0;
-                }
-            })
-            // get the temp units
-            .then(JSON.parse)
-            .then(function(data) {
-                let temp = document.querySelector("h1");
-                temp.innerText = Math.round(data.main.temp) + '\xB0';
-
-                changeImage(data.weather[0].main);
-                console.log(data.weather[0].main);
-
-                let cast = document.querySelector("h4"); // ex: Rainy
-                cast.innerText = data.weather[0].main;
-
-                let place = document.querySelector("h3"); // geo location
-                place.innerText = data.name;
-
-                let country = document.querySelector("h5");
-                country.innerText = data.sys.country;
-
-                // added on 2-17-2020
-                let pressure = document.getElementById("press");
-                pressure.opacity=0;
-                pressure.innerText = "Atmospheric Pressure: " + data.main.pressure + " hPa";
-
-                let humidity = document.getElementById("humidity");
-                humidity.opacity=0;
-                humidity.innerText = "Humidity: " + data.main.humidity + "%";
-
-                let wnd = document.getElementById("windspeed");
-                wnd.opacity=0;
-                wnd.innerText = "Wind Speed: " + data.wind.speed + " meters/second";
-                fade(wnd);
-                fade(humidity);
-                fade(pressure);
-                fade(temp);
-            })
-            .catch(function(){
-                alert("Invalid response, please check your inputs.");
-            })
+  });
+  buttonCity.addEventListener("click", function () {
+    setLocation("city");
+  });
+  inputCity.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+      buttonCity.click();
     }
+  });
+  buttonLatLon.addEventListener("click", function () {
+    setLocation("latlon");
+  });
+  inputLat.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+      buttonLatLon.click();
+    }
+  });
+  setLocation();
 }
 
-function FtoC(degree) {
-    let ret = degree - 32;
-    ret = ret * 5 / 9;
-    return Math.round(ret);
-}
-function CtoF(degree) {
-    let ret = degree * 9 / 5;
-    ret = ret + 32;
-    return Math.round(ret);
+/********************** Changing Place of Weather ************************/
+function setLocation(mode) {
+  let units = "metric";
+  if (document.getElementById("F").disabled) {
+    units = "imperial"; // Fahrenheit
+  }
+  if (window.navigator.geolocation) {
+    console.log("yess");
+    // grab user's geolocation (with permission)
+    navigator.geolocation.getCurrentPosition(
+      successfullyGrabGeoLocation,
+      errorGrabbingGeoLocation,
+      geoLocationOptions
+    );
+  } else {
+    let key = "q=Seattle"; // default Seattle if no geolocation or input
+    // user manually inputted key
+    if (mode == "zip") {
+      let input = document.getElementById("get_zip");
+      key = "zip=" + input.value;
+    } else if (mode == "city") {
+      let input = document.getElementById("get_city");
+      key = "q=" + input.value;
+    } else if (mode == "latlon") {
+      let lat = document.getElementById("get_lat");
+      let lon = document.getElementById("get_lon");
+      key = "lat=" + lat.value + "&lon=" + lon.value;
+    }
+    console.log("Key to search by: " + key);
+    let url = Base_API + key + "&units=" + units + "&appid=" + APIKey;
+    console.log("URL to FETCH: " + url);
+    fetchData(url);
+  }
 }
 
-// added fade in functionality 2-17-2020
+/* Fetches weather data from OpenWeatherMap */
+function fetchData(url) {
+  fetch(url)
+    .then(function (data) {
+      if (data.status >= 200 && data.status < 300) {
+        return data.text();
+      } else {
+        return 0;
+      }
+    })
+    .then(JSON.parse)
+    .then(function (data) {
+      let temp = document.querySelector("h1");
+      temp.innerText = Math.round(data.main.temp) + "\xB0";
+
+      changeWeatherImage(data.weather[0].main);
+      console.log("current weather is: " + data.weather[0].main);
+
+      let cast = document.querySelector("h4"); // ex: Rainy
+      cast.innerText = data.weather[0].main;
+
+      let place = document.querySelector("h3"); // geo location
+      place.innerText = data.name;
+
+      let country = document.querySelector("h5");
+      country.innerText = data.sys.country;
+
+      let pressure = document.getElementById("press");
+      pressure.opacity = 0;
+      pressure.innerText =
+        "Atmospheric Pressure: " + data.main.pressure + " hPa";
+
+      let humidity = document.getElementById("humidity");
+      humidity.opacity = 0;
+      humidity.innerText = "Humidity: " + data.main.humidity + "%";
+
+      let wnd = document.getElementById("windspeed");
+      wnd.opacity = 0;
+      wnd.innerText = "Wind Speed: " + data.wind.speed + " meters/second";
+      fade(wnd);
+      fade(humidity);
+      fade(pressure);
+      fade(temp);
+    })
+    .catch(function () {
+      alert("Invalid response, please check your inputs.");
+    });
+}
+/* Changes the left weather icon to Sun, Cloud... etc */
+function changeWeatherImage(new_img) {
+  console.log("current img = " + new_img);
+  let audio = document.getElementById("audio");
+  console.log("current audio: " + audio);
+  audio.pause();
+  audio.loop = false;
+  let img = document.getElementById("img");
+  let top = document.getElementById("top");
+  top.className = "flexy";
+
+  // Default cloudy
+  //   let imgs = ["cloudy", "rain", "semi_cloudy", "snowflake", "storm", "sunny"];
+  if (new_img.toLowerCase() == "clear") {
+    img.src = "images/sunny.svg";
+    img.alt = "Yellow Sun";
+  } else if (new_img.toLowerCase() == "clouds") {
+    img.src = "images/cloudy.svg";
+    img.alt = "Gray Clouds";
+    top.classList.add("fog");
+  } else if (new_img.toLowerCase() == "snow") {
+    img.src = "images/snowflake.svg";
+    img.alt = "White Snowflake";
+    top.classList.add("snow");
+  } else {
+    img.src = "images/rain.svg";
+    img.alt = "Gray Clouds and Rain";
+    top.classList.add("rain");
+    audio.play();
+    audio.loop = true;
+  }
+}
+
+/* Temperature conversions */
+function fahrenToCels(degree) {
+  let ret = degree - 32;
+  ret = (ret * 5) / 9;
+  return Math.round(ret);
+}
+function celsToFahren(degree) {
+  let ret = (degree * 9) / 5;
+  ret = ret + 32;
+  return Math.round(ret);
+}
+
+/* For grabbing geolocation */
+var geoLocationOptions = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
+/* Successfully grabbed user's geolocation, changes location */
+function successfullyGrabGeoLocation(pos) {
+  let key = "lat=" + pos.coords.latitude + "&lon=" + pos.coords.longitude;
+  let url = Base_API + key + "&units=" + "metric" + "&appid=" + APIKey;
+  console.log("URL to FETCH: " + url);
+  fetchData(url);
+}
+function errorGrabbingGeoLocation(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+/* Styling */
 function fade(element) {
-    var op = 0;  // initial opacity
-    var timer = setInterval(function () {
-        if (op >= 1){
-            clearInterval(timer);
-        }
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op += 0.03;
-    }, 50);
+  var op = 0; // initial opacity
+  var timer = setInterval(function () {
+    if (op >= 1) {
+      clearInterval(timer);
+    }
+    element.style.opacity = op;
+    element.style.filter = "alpha(opacity=" + op * 100 + ")";
+    op += 0.03;
+  }, 50);
 }
