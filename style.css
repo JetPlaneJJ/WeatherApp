@@ -41,8 +41,9 @@ h5 {
 }
 
 h6 {
-    font-size: 0.99rem;
+    font-size: large;
     -webkit-animation: fadein 2.5s;
+    margin-left: 70px;
 }
 
 button {
@@ -91,6 +92,7 @@ img:hover {
     align-items: center;
     margin-left: 1.5rem;
     margin-right: 1.5rem;
+    font-size: large;
 }
 
 .middle_box {
@@ -121,15 +123,20 @@ img:hover {
 .inputs {
     display: flex;
     flex-direction: column;
-    border-radius: 5px;
-    font-size: large;
+    font-size: x-large;
     align-content: center;
+    border-radius: 5px;
+    height: 35px;
+    width: 300px;
+    border: none;
+    margin: none;
 }
 
 .degs_btn {
     background: none;
-    margin: .8rem;
-    border-radius: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 5px;
     padding: .1rem;
     margin-top: 0rem;
     font-size: 1.5rem;
@@ -143,13 +150,26 @@ img:hover {
 .input_btn {
     background: white;
     border: none;
-    border-radius: 5px;
     padding: .5rem;
     margin: .5rem;
-    font-size: 1rem;
+    font-size: large;
 }
 
 /************************ IDs ************************/
+
+#top-layer {
+    position: absolute;
+    z-index: 1;
+    top: 20%;
+    left: 35%;
+}
+
+#bottom-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
 
 #top {
     background-color: #FDEDEC;

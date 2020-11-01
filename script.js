@@ -19,6 +19,8 @@ function init() {
 
   let buttonLatLon = document.getElementById("latlon_btn");
   let inputLat = document.getElementById("get_lon");
+  let inputLon = document.getElementById("get_lat");
+
   /* Listeners */
   // F - > C
   buttonC.addEventListener("click", function () {
@@ -39,6 +41,7 @@ function init() {
   });
   buttonZip.addEventListener("click", function () {
     setLocation("zip");
+    clearAllInputs();
   });
   inputZip.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
@@ -47,6 +50,7 @@ function init() {
   });
   buttonCity.addEventListener("click", function () {
     setLocation("city");
+    clearAllInputs();
   });
   inputCity.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
@@ -55,6 +59,7 @@ function init() {
   });
   buttonLatLon.addEventListener("click", function () {
     setLocation("latlon");
+    clearAllInputs();
   });
   inputLat.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
@@ -66,11 +71,13 @@ function init() {
 
 /********************** Changing Place of Weather ************************/
 function setLocation(mode) {
+  toggleLoading(true);
+
   let units = "metric";
   if (document.getElementById("F").disabled) {
     units = "imperial"; // Fahrenheit
   }
-  if (window.navigator.geolocation) {
+  if (window.navigator.geolocation && !mode) {
     console.log("yess");
     // grab user's geolocation (with permission)
     navigator.geolocation.getCurrentPosition(
@@ -138,14 +145,19 @@ function fetchData(url) {
       let wnd = document.getElementById("windspeed");
       wnd.opacity = 0;
       wnd.innerText = "Wind Speed: " + data.wind.speed + " meters/second";
-      fade(wnd);
-      fade(humidity);
-      fade(pressure);
-      fade(temp);
+
+      toggleLoading(false);
     })
     .catch(function () {
       alert("Invalid response, please check your inputs.");
     });
+}
+
+function clearAllInputs() {
+  document.getElementById("get_lon").value = "";
+  document.getElementById("get_lat").value = "";
+  document.getElementById("get_city").value = "";
+  document.getElementById("get_zip").value = "";
 }
 /* Changes the left weather icon to Sun, Cloud... etc */
 function changeWeatherImage(new_img) {
@@ -211,14 +223,56 @@ function errorGrabbingGeoLocation(err) {
 }
 
 /* Styling */
-function fade(element) {
-  var op = 0; // initial opacity
-  var timer = setInterval(function () {
-    if (op >= 1) {
-      clearInterval(timer);
-    }
-    element.style.opacity = op;
-    element.style.filter = "alpha(opacity=" + op * 100 + ")";
-    op += 0.03;
-  }, 50);
+// for fading in large parts of the page, fadeInDoc = true if fading in
+function fadeInOrOutDocument(fadeInDoc) {
+  let inputButtons = document.getElementsByClassName("inputs");
+  var i;
+  for (i = 0; i < inputButtons.length; i++) {
+    fadeInOrOut(inputButtons[i], fadeInDoc);
+  }
+  let inputs = document.getElementsByClassName("input_btn");
+  var i;
+  for (i = 0; i < inputs.length; i++) {
+    fadeInOrOut(inputs[i], fadeInDoc);
+  }
+  let weatherRightSection = document.getElementById("weather-location-names");
+  fadeInOrOut(weatherRightSection, fadeInDoc);
+  let img = document.getElementById("img");
+  fadeInOrOut(img, fadeInDoc);
+  let mid2 = document.getElementById("mid2");
+  fadeInOrOut(mid2, fadeInDoc);
+}
+
+function fadeInOrOut(element, fadeIn) {
+  if (fadeIn) {
+    var op = 0; // initial opacity
+    var timer = setInterval(function () {
+      if (op >= 1) {
+        clearInterval(timer);
+      }
+      element.style.opacity = op;
+      element.style.filter = "alpha(opacity=" + op * 100 + ")";
+      op += 0.03;
+    }, 30);
+  } else {
+    var op = element.style.opacity;
+    var timer = setInterval(function () {
+      if (op == 0) {
+        clearInterval(timer);
+      }
+      element.style.opacity = op;
+      element.style.filter = "alpha(opacity=" + op * 100 + ")";
+      op -= 0.03;
+    }, 10);
+  }
+}
+// show is true if should show loading
+function toggleLoading(show) {
+  let loadingIcon = document.getElementById("loading");
+  console.log(loadingIcon);
+  if (show) {
+    loadingIcon.style.opacity = 1.0;
+  } else {
+    fadeInOrOut(loadingIcon, false);
+  }
 }
